@@ -1,0 +1,32 @@
+.titleBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px;
+  background-color: rgb(243 244 246);
+  color: rgb(0 0 0);
+}
+
+.title {
+  display: flex;
+  align-items: center;
+}
+
+.titleImage {
+  width: 16px;
+  margin-right: 10px;
+}
+
+.titleLonger {
+  display: none;
+  @media (min-width: 640px) {
+    display: block;
+  }
+}
+
+.titleShorter {
+  display: block;
+  @media (min-width: 640px) {
+    display: none;
+  }
+}

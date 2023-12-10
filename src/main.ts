@@ -1,10 +1,10 @@
-import './style.scss';
 import { Terminal } from './components';
+import './style.scss';
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-<div>
-  <div id='terminal' />
-</div>
+  <div>
+    <terminal--component />
+  </div>
 `;
 
-Terminal();
+customElements.define('terminal--component', Terminal);
