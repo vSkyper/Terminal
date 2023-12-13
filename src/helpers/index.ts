@@ -1,3 +1,4 @@
 import closeTerminal from './closeTerminal';
+import minimizeTerminal from './minimizeTerminal';
 
-export { closeTerminal };
+export { closeTerminal, minimizeTerminal };

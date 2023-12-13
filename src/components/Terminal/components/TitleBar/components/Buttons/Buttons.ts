@@ -6,7 +6,12 @@ import closeUrl from './images/close.png';
 export default function Buttons() {
   return /* HTML */ `
     <div class=${classes.buttons}>
-      <img class=${classes.button} src=${minimizeUrl} alt="minimize" />
+      <img
+        class=${classes.button}
+        src=${minimizeUrl}
+        alt="minimize"
+        id="minimize-terminal"
+      />
       <img class=${classes.button} src=${windowMaxUrl} alt="maximize" />
       <img
         class=${classes.button}
