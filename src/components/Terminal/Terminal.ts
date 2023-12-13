@@ -1,16 +1,8 @@
 import classes from './Terminal.module.scss';
-import { TitleBar } from './components';
+import { TitleBar, Window } from './components';
 
-export default class Terminal extends HTMLElement {
-  constructor() {
-    super();
-
-    this.innerHTML = `
-      <div class=${classes.wrapper}>
-        <title-bar--component />
-      </div>
-    `;
-
-    customElements.define('title-bar--component', TitleBar);
-  }
+export default function Terminal() {
+  return /* HTML */ `
+    <div class=${classes.wrapper} id="terminal">${TitleBar()} ${Window()}</div>
+  `;
 }

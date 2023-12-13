@@ -1,3 +1,4 @@
 import TitleBar from './TitleBar';
+import Window from './Window';
 
-export { TitleBar };
+export { TitleBar, Window };

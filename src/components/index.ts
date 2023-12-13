@@ -1,3 +1,4 @@
 import Terminal from './Terminal';
+import Closed from './Closed';
 
-export { Terminal };
+export { Terminal, Closed };
