@@ -1,5 +1,5 @@
 import { Closed, Minimize, Terminal } from './components';
-import { closeTerminal, minimizeTerminal } from './helpers';
+import { closeTerminal, minimizeTerminal, resizeTerminal } from './helpers';
 import './style.scss';
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = /* HTML */ `
@@ -8,3 +8,4 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = /* HTML */ `
 
 closeTerminal();
 minimizeTerminal();
+resizeTerminal();

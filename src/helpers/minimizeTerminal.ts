@@ -14,7 +14,7 @@ export default function minimizeTerminal() {
   });
 
   terminalMinimized.addEventListener('click', () => {
-    terminal.style.display = 'block';
+    terminal.style.display = 'flex';
     terminalMinimized.style.display = 'none';
   });
 }

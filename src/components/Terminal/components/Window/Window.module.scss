@@ -1,4 +1,6 @@
 .wrapper {
   padding: 4px;
   overflow-y: scroll;
+  flex-grow: 1;
+  max-height: calc(100vh - 30px);
 }

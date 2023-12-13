@@ -1,6 +1,7 @@
 import classes from './Buttons.module.scss';
 import minimizeUrl from './images/minimize.png';
-import windowMaxUrl from './images/window-max.png';
+import terminalMaxUrl from './images/window-max.png';
+import terminalMinUrl from './images/window-min.png';
 import closeUrl from './images/close.png';
 
 export default function Buttons() {
@@ -12,7 +13,18 @@ export default function Buttons() {
         alt="minimize"
         id="minimize-terminal"
       />
-      <img class=${classes.button} src=${windowMaxUrl} alt="maximize" />
+      <img
+        class=${classes.button}
+        src=${terminalMaxUrl}
+        alt="terminalMax"
+        id="terminal-max"
+      />
+      <img
+        class="${classes.button}"
+        src=${terminalMinUrl}
+        alt="terminalMin"
+        id="terminal-min"
+      />
       <img
         class=${classes.button}
         src=${closeUrl}
