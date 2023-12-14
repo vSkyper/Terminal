@@ -3,6 +3,8 @@ import { Commands, Content } from './components';
 
 export default function Window() {
   return /* HTML */ `
-    <div class=${classes.wrapper}>${Content()} ${Commands()}</div>
+    <div class=${classes.wrapper} id="terminal-window">
+      ${Content()} ${Commands()}
+    </div>
   `;
 }

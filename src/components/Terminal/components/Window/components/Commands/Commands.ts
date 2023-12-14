@@ -6,8 +6,10 @@ export default function Commands() {
       document.querySelector<HTMLInputElement>('#commands-input');
     const commandsOutput =
       document.querySelector<HTMLDivElement>('#commands-output');
+    const terminalWindow =
+      document.querySelector<HTMLDivElement>('#terminal-window');
 
-    if (!commandsInput || !commandsOutput) return;
+    if (!commandsInput || !commandsOutput || !terminalWindow) return;
 
     commandsInput.focus();
 
@@ -29,6 +31,7 @@ export default function Commands() {
       }
 
       commandsInput.value = '';
+      terminalWindow.scrollTo(0, terminalWindow.scrollHeight);
     });
   };
 
