@@ -1,49 +1,76 @@
 import classes from './Commands.module.scss';
+import {
+  CommandProcessor,
+  DOMManager,
+  ConfigManager,
+} from '../../../../../../utils';
 
-export default function Commands() {
-  const commandsInput = async () => {
+export default function Commands(): string {
+  const initializeCommands = (): void => {
+    const domManager = DOMManager.getInstance();
+    const commandProcessor = CommandProcessor.getInstance();
+
     const commandsInput =
-      document.querySelector<HTMLInputElement>('#commands-input');
+      domManager.querySelector<HTMLInputElement>('#commands-input');
     const commandsOutput =
-      document.querySelector<HTMLDivElement>('#commands-output');
+      domManager.querySelector<HTMLDivElement>('#commands-output');
     const terminalWindow =
-      document.querySelector<HTMLDivElement>('#terminal-window');
+      domManager.querySelector<HTMLDivElement>('#terminal-window');
 
-    if (!commandsInput || !commandsOutput || !terminalWindow) return;
+    if (!commandsInput || !commandsOutput || !terminalWindow) {
+      console.warn('Commands: Required elements not found');
+      return;
+    }
 
-    commandsInput.focus();
+    // Focus the input
+    domManager.focusElement(commandsInput);
 
-    commandsInput.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (e.key !== 'Enter') return;
+    const handleKeyDown: EventListener = (e: Event): void => {
+      const keyboardEvent = e as KeyboardEvent;
+      if (keyboardEvent.key !== 'Enter') return;
 
-      switch (commandsInput.value.toLowerCase()) {
-        case 'time': {
-          const time = new Date().toLocaleString();
-          commandsOutput.innerHTML = `Now is ${time}`;
-          break;
+      const command = commandsInput.value.trim();
+
+      if (command) {
+        const output = commandProcessor.processCommand(command);
+
+        if (command.toLowerCase() === 'clear') {
+          domManager.clearContent(commandsOutput);
+        } else {
+          domManager.setContent(commandsOutput, output);
         }
-        case 'ping':
-          commandsOutput.innerHTML = `Pong!`;
-          break;
-        default:
-          commandsOutput.innerHTML = `'${commandsInput.value}' is not recognized as an internal or external command, operable program or batch file.`;
-          break;
       }
 
       commandsInput.value = '';
-      terminalWindow.scrollTo(0, terminalWindow.scrollHeight);
-    });
+      domManager.scrollToBottom(terminalWindow);
+    };
+
+    domManager.addEventListener(commandsInput, 'keydown', handleKeyDown);
   };
 
-  (function () {
-    addEventListener('load', () => {
-      commandsInput();
-    });
-  })();
+  // Initialize when DOM is loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeCommands);
+  } else {
+    // DOM is already loaded
+    setTimeout(initializeCommands, 0);
+  }
+
+  const configManager = ConfigManager.getInstance();
+  const placeholder = configManager.getSetting('command', 'placeholder');
 
   return /* HTML */ `
-    <div class=${classes.title}>Try out some commands!</div>
-    <div>&gt; <input class=${classes.input} id="commands-input" /></div>
+    <div class=${classes.title}>
+      Try out some commands! (Type 'help' for available commands)
+    </div>
+    <div>
+      &gt;
+      <input
+        class=${classes.input}
+        id="commands-input"
+        placeholder="${placeholder}"
+      />
+    </div>
     <div id="commands-output"></div>
   `;
 }

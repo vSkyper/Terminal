@@ -1,20 +1,28 @@
-export default function minimizeTerminal() {
+import { DOMManager, TerminalStateManager } from '../utils';
+
+export default function minimizeTerminal(): void {
+  const domManager = DOMManager.getInstance();
+  const stateManager = TerminalStateManager.getInstance();
+
   const minimizeButton =
-    document.querySelector<HTMLImageElement>('#minimize-terminal');
-  const terminal = document.querySelector<HTMLDivElement>('#terminal');
-  const terminalMinimized = document.querySelector<HTMLDivElement>(
+    domManager.querySelector<HTMLImageElement>('#minimize-terminal');
+  const terminalMinimized = domManager.querySelector<HTMLDivElement>(
     '#terminal-minimized'
   );
 
-  if (!minimizeButton || !terminal || !terminalMinimized) return;
+  if (!minimizeButton || !terminalMinimized) {
+    console.warn('minimizeTerminal: Required elements not found');
+    return;
+  }
 
-  minimizeButton.addEventListener('click', () => {
-    terminal.style.display = 'none';
-    terminalMinimized.style.display = 'block';
-  });
+  const handleMinimize: EventListener = (): void => {
+    stateManager.executeAction('minimize');
+  };
 
-  terminalMinimized.addEventListener('click', () => {
-    terminal.style.display = 'flex';
-    terminalMinimized.style.display = 'none';
-  });
+  const handleRestore: EventListener = (): void => {
+    stateManager.executeAction('open');
+  };
+
+  domManager.addEventListener(minimizeButton, 'click', handleMinimize);
+  domManager.addEventListener(terminalMinimized, 'click', handleRestore);
 }

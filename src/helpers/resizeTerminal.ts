@@ -1,23 +1,34 @@
-export default function resizeTerminal() {
-  const terminalMax = document.querySelector<HTMLImageElement>('#terminal-max');
-  const terminalMin = document.querySelector<HTMLImageElement>('#terminal-min');
-  const terminal = document.querySelector<HTMLDivElement>('#terminal');
+import { DOMManager, TerminalStateManager } from '../utils';
 
-  if (!terminalMax || !terminalMin || !terminal) return;
+export default function resizeTerminal(): void {
+  const domManager = DOMManager.getInstance();
+  const stateManager = TerminalStateManager.getInstance();
 
-  terminalMin.style.display = 'none';
+  const terminalMax =
+    domManager.querySelector<HTMLImageElement>('#terminal-max');
+  const terminalMin =
+    domManager.querySelector<HTMLImageElement>('#terminal-min');
 
-  terminalMax.addEventListener('click', () => {
-    terminalMax.style.display = 'none';
-    terminalMin.style.display = 'block';
-    terminal.style.height = '100%';
-    terminal.style.maxWidth = '100%';
-  });
+  if (!terminalMax || !terminalMin) {
+    console.warn('resizeTerminal: Required elements not found');
+    return;
+  }
 
-  terminalMin.addEventListener('click', () => {
-    terminalMax.style.display = 'block';
-    terminalMin.style.display = 'none';
-    terminal.style.height = 'auto';
-    terminal.style.maxWidth = '';
-  });
+  // Initialize state - minimize button hidden by default
+  domManager.setVisibility(terminalMin, false);
+
+  const handleMaximize: EventListener = (): void => {
+    stateManager.executeAction('maximize');
+    domManager.setVisibility(terminalMax, false);
+    domManager.setVisibility(terminalMin, true);
+  };
+
+  const handleRestore: EventListener = (): void => {
+    stateManager.executeAction('restore');
+    domManager.setVisibility(terminalMax, true);
+    domManager.setVisibility(terminalMin, false);
+  };
+
+  domManager.addEventListener(terminalMax, 'click', handleMaximize);
+  domManager.addEventListener(terminalMin, 'click', handleRestore);
 }

@@ -1,37 +1,67 @@
 import classes from './Content.module.scss';
+import { DOMManager, ConfigManager } from '../../../../../../utils';
 
-export default function Content() {
-  const q_1: string =
-    "How's business? Boomin. The ladies always say Khaled you smell good, I use no cologne. Cocoa butter is the key. Surround yourself with angels. To be successful you've got to work hard, to make history, simple, you've got to make it. You smart, you loyal, you a genius. Fan luv. Find peace, life is like a water fall, you've gotta flow. It's on you how you want to live your life. Everyone has a choice. I pick my choice, squeaky clean. You smart, you loyal, you a genius.";
+// Constants for better maintainability
+const QUOTES = {
+  first:
+    "How's business? Boomin. The ladies always say Khaled you smell good, I use no cologne. Cocoa butter is the key. Surround yourself with angels. To be successful you've got to work hard, to make history, simple, you've got to make it. You smart, you loyal, you a genius. Fan luv. Find peace, life is like a water fall, you've gotta flow. It's on you how you want to live your life. Everyone has a choice. I pick my choice, squeaky clean. You smart, you loyal, you a genius.",
+  second:
+    "In life you have to take the trash out, if you have trash in your life, take it out, throw it away, get rid of it, major key. Another one. A major key, never panic. Don't panic, when it gets crazy and rough, don't panic, stay calm. Another one.",
+} as const;
 
-  const q_2: string =
-    "In life you have to take the trash out, if you have trash in your life, take it out, throw it away, get rid of it, major key. Another one. A major key, never panic. Don't panic, when it gets crazy and rough, don't panic, stay calm. Another one.";
+const ELEMENT_IDS = {
+  quoteOne: 'quote-one',
+  quoteTwo: 'quote-two',
+} as const;
 
-  const typeWriter = async () => {
-    const quoteOne = document.querySelector<HTMLLIElement>('#quote-one');
-    const quoteTwo = document.querySelector<HTMLLIElement>('#quote-two');
+export default function Content(): string {
+  const initializeTypewriter = async (): Promise<void> => {
+    const domManager = DOMManager.getInstance();
+    const configManager = ConfigManager.getInstance();
 
-    if (!quoteOne || !quoteTwo) return;
+    const typewriterSettings = configManager.getSetting('typewriter');
 
-    for (let i = 0; i <= q_1.length; i++) {
-      quoteOne.innerHTML = q_1.substring(0, i);
-      await new Promise((r) => setTimeout(r, 5));
+    const quoteOne = domManager.querySelector<HTMLLIElement>(
+      `#${ELEMENT_IDS.quoteOne}`
+    );
+    const quoteTwo = domManager.querySelector<HTMLLIElement>(
+      `#${ELEMENT_IDS.quoteTwo}`
+    );
+
+    if (!quoteOne || !quoteTwo) {
+      console.warn('Content: Typewriter elements not found');
+      return;
     }
 
-    for (let i = 0; i <= q_2.length; i++) {
-      quoteTwo.innerHTML = q_2.substring(0, i);
-      await new Promise((r) => setTimeout(r, 5));
+    // Type first quote
+    for (let i = 0; i <= QUOTES.first.length; i++) {
+      domManager.setContent(quoteOne, QUOTES.first.substring(0, i));
+      await new Promise((resolve) =>
+        setTimeout(resolve, typewriterSettings.delay)
+      );
+    }
+
+    // Type second quote
+    for (let i = 0; i <= QUOTES.second.length; i++) {
+      domManager.setContent(quoteTwo, QUOTES.second.substring(0, i));
+      await new Promise((resolve) =>
+        setTimeout(resolve, typewriterSettings.delay)
+      );
     }
   };
 
-  (function () {
-    addEventListener('load', () => {
-      typeWriter();
-    });
-  })();
+  // Initialize typewriter effect when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeTypewriter);
+  } else {
+    // DOM is already loaded
+    setTimeout(initializeTypewriter, 0);
+  }
+
+  const currentYear = new Date().getFullYear();
 
   return /* HTML */ `
-    <div>A terminal-looking page (c) ${new Date().getFullYear()}</div>
+    <div>A terminal-looking page (c) ${currentYear}</div>
     <ul class=${classes.wrapper}>
       <li class=${classes.title}>&gt; Wheat toast, water</li>
       <li class=${classes.content}>
@@ -39,7 +69,7 @@ export default function Content() {
         have to get money, we have no choice.
       </li>
       <li class=${classes.title}>&gt; Khaled you smell good</li>
-      <li class=${classes.content} id="quote-one"></li>
+      <li class=${classes.content} id="${ELEMENT_IDS.quoteOne}"></li>
       <li class=${classes.title}>&gt; Celebrate success right</li>
       <li class=${classes.content}>
         Always remember in the jungle there's a lot of they in there, after you
@@ -49,7 +79,7 @@ export default function Content() {
         believe, you will succeed. How's business? Boomin.
       </li>
       <li class=${classes.title}>&gt; A major key, never panic</li>
-      <li class=${classes.content} id="quote-two"></li>
+      <li class=${classes.content} id="${ELEMENT_IDS.quoteTwo}"></li>
       <li class=${classes.title}>&gt; How's business?</li>
       <li class=${classes.content}>
         They don't want us to eat. The key is to drink coconut, fresh coconut,

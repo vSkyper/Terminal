@@ -1,14 +1,20 @@
-export default function closeTerminal() {
+import { DOMManager, TerminalStateManager } from '../utils';
+
+export default function closeTerminal(): void {
+  const domManager = DOMManager.getInstance();
+  const stateManager = TerminalStateManager.getInstance();
+
   const closeButton =
-    document.querySelector<HTMLImageElement>('#close-terminal');
-  const terminal = document.querySelector<HTMLDivElement>('#terminal');
-  const terminalClosed =
-    document.querySelector<HTMLDivElement>('#terminal-closed');
+    domManager.querySelector<HTMLImageElement>('#close-terminal');
 
-  if (!closeButton || !terminal || !terminalClosed) return;
+  if (!closeButton) {
+    console.warn('closeTerminal: Close button not found');
+    return;
+  }
 
-  closeButton.addEventListener('click', () => {
-    terminal.style.display = 'none';
-    terminalClosed.style.display = 'block';
-  });
+  const handleClose: EventListener = (): void => {
+    stateManager.executeAction('close');
+  };
+
+  domManager.addEventListener(closeButton, 'click', handleClose);
 }
